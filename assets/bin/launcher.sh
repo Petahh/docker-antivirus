@@ -1,14 +1,9 @@
 #!/bin/bash
-# inotify watches the queue and launches the AV scanner when new files are written, keeps the docker container running as well!
-#
-#  -m /data/av/queue                monitor /data/av/queue forever
-#  -r                            watched directory recursively
-#  -q                            quiet (only print events)
-#  -t 0                          never timeout
-#  -e moved_to,close_write       only fire if a file is moved to or written into the watched directory
-#
-printf "Waiting for changes to /data/av/queue ...\n"
-inotifywait -m -r -q -t 0 -e moved_to,close_write /data/av/queue |
-while read -r path action file; do
-     /usr/local/bin/scanner.sh
+until [ -f /data/av/queue/scan.now ]
+do
+     sleep 5
 done
+echo "Trigger file found executing antivirus scan now!"
+rm -rf /data/av/queue/scan.now
+/usr/local/bin/scanner.sh
+exit
