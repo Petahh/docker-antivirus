@@ -17,8 +17,8 @@ files=$(shopt -s nullglob dotglob; echo /usr/local/maldetect/quarantine/*)
 if (( ${#files} ))
 then
     for file in "/usr/local/maldetect/quarantine"/* ; do
-        filename=`basename $file`
+        filename=`basename "$file"`
         printf "  --> Moving maldet quarantined file to /data/av/quarantine/${filename}\n"
-        mv -f $file "/data/av/quarantine/${filename}"
+        mv -f "$file" "/data/av/quarantine/${filename}"
     done
 fi
